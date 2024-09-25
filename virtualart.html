@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Art Gallery</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #eaeff2;
+            color: #333;
+        }
+
+        header {
+            background-color: #2f4f6d;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        p {
+            font-size: 1.2em;
+            margin-top: 5px;
+            color: #aeb4b9;
+        }
+
+        .gallery {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+            flex-wrap: wrap;
+        }
+
+        .artwork {
+            width: 30%;
+            margin: 10px;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .artwork img {
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .artwork:hover img {
+            transform: scale(1.05);
+        }
+
+        .artwork-info {
+            display: none;
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .artwork:hover .artwork-info {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 700px;
+            width: 80%;
+            position: relative;
+        }
+
+        .close, .back-button {
+            position: absolute;
+            top: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #2f4f6d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .close {
+            right: 20px;
+        }
+
+        .back-button {
+            left: 20px;
+        }
+
+        .modal-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .modal-gallery img {
+            width: 45%;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Homepage content */
+        .intro-text {
+            text-align: center;
+            margin: 40px;
+            font-size: 1.3em;
+            line-height: 1.6;
+            color: #4a4a4a;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Virtual Art Gallery</h1>
+        <p>Explore Timeless Masterpieces</p>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            Welcome to the Virtual Art Gallery! Step into a digital world of artistic wonders, where each image tells a story and every brushstroke is a masterpiece.
+            Click on any artwork to discover more from the same collection. Hover to learn more about the artist and the title.
+        </div>
+
+        <div class="gallery">
+            <!-- Art Piece 1 -->
+            <div class="artwork" onclick="showMoreArtworks('art1')">
+                <img src="https://static.wixstatic.com/media/083074_db1140262333415295471a0f5c1c54d4~mv2.jpg/v1/fill/w_640,h_258,al_t,q_80,usm_0.66_1.00_0.01,enc_auto/083074_db1140262333415295471a0f5c1c54d4~mv2.jpg" alt="Art Piece 1">
+                <div class="artwork-info">
+                    <h2>Title: Art Piece 1</h2>
+                    <p>Artist: John Doe</p>
+                </div>
+            </div>
+
+            <!-- Art Piece 2 -->
+            <div class="artwork" onclick="showMoreArtworks('art2')">
+                <img src="https://imageio.forbes.com/specials-images/imageserve/1222509385/painting-of-Mona-Lisa--woman-s-head/960x0.jpg?format=jpg&width=960" alt="Art Piece 2">
+                <div class="artwork-info">
+                    <h2>Title: Art Piece 2</h2>
+                    <p>Artist: Jane Doe</p>
+                </div>
+            </div>
+
+            <!-- Art Piece 3 -->
+            <div class="artwork" onclick="showMoreArtworks('art3')">
+                <img src="https://study.com/cimages/multimages/16/1480px-john_henry_fuseli_-_the_nightmare2630602272447175363.jpg" alt="Art Piece 3">
+                <div class="artwork-info">
+                    <h2>Title: Art Piece 3</h2>
+                    <p>Artist: Bob Smith</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal for displaying more artworks -->
+    <div id="artworkModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <button class="back-button" onclick="closeModal()">Back to Gallery</button>
+            <h2>More Artworks</h2>
+            <div id="modalGallery" class="modal-gallery">
+                <!-- Dynamic content goes here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // More artworks data
+        const moreArtworks = {
+            'art1': [
+                { title: 'Art Piece 1.1', image: 'https://i.pinimg.com/550x/56/cc/22/56cc2280828904e205b72b1040757cf5.jpg' },
+                { title: 'Art Piece 1.2', image: 'https://m.media-amazon.com/images/I/61178qYOPKL._AC_UF894,1000_QL80_.jpg' }
+            ],
+            'art2': [
+                { title: 'Art Piece 2.1', image: 'https://byronsmuse.wordpress.com/wp-content/uploads/2015/05/1774-the-bard-thomas-jones.jpg' },
+                { title: 'Art Piece 2.2', image: 'https://www.mayfairgallery.com/media/wysiwyg/John_William_Waterhouse_-_The_Lady_of_Shalott.jpg' }
+            ],
+            'art3': [
+                { title: 'Art Piece 3.1', image: 'https://d3d00swyhr67nd.cloudfront.net/_source/artuk_stories/van-gogh-starry-night-725-1.jpg' },
+                { title: 'Art Piece 3.2', image: 'https://render.fineartamerica.com/images/images-profile-flow/400/images/artworkimages/mediumlarge/2/5-girl-with-a-pearl-earring-johannes-vermeer.jpg' }
+            ]
+        };
+
+        // Function to display more artworks in the modal
+        function showMoreArtworks(artworkId) {
+            const modal = document.getElementById('artworkModal');
+            const modalGallery = document.getElementById('modalGallery');
+
+            // Clear previous modal content
+            modalGallery.innerHTML = '';
+
+            // Add new artworks to the modal
+            moreArtworks[artworkId].forEach(art => {
+                const artImg = document.createElement('img');
+                artImg.src = art.image;
+                artImg.alt = art.title;
+                modalGallery.appendChild(artImg);
+            });
+
+            // Display the modal
+            modal.style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('artworkModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
